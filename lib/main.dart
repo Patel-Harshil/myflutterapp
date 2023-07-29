@@ -43,6 +43,9 @@ class HomePage extends StatelessWidget {
               } else {
                 return const VerifyEmailView();
               }
+              else {
+                return const VerifyEmailView();
+              }
             } else {
               return const LoginView();
             }
