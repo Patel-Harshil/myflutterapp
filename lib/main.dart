@@ -110,8 +110,8 @@ Future<bool> showLogOutDialog(BuildContext context) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text("Sign out"),
-        content: const Text("Are you sure you want to sign out"),
+        title: const Text("log out"),
+        content: const Text("Are you sure you want to log out"),
         actions: [
           TextButton(
             onPressed: () {
