@@ -7,7 +7,7 @@ import 'package:my_flutter_app/views/login_view.dart';
 import 'package:my_flutter_app/views/register_view.dart';
 import 'package:my_flutter_app/views/verify_email_view.dart';
 import 'dart:developer' as devtools show log;
-
+ 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
