@@ -2,6 +2,8 @@
   "java.configuration.updateBuildConfiguration": "automatic",
   "cSpell.words": [
     "ARGB",
-    "autocorrect"
+    "autocorrect",
+    "AUTOINCREMENT",
+    "sqflite"
   ]
 }
