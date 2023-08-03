@@ -8,6 +8,7 @@ import 'package:my_flutter_app/views/verify_email_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     MaterialApp(
       title: 'Flutter Demo',
@@ -28,9 +29,10 @@ void main() {
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<void>(
       future: AuthService.firebase().initialize(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
