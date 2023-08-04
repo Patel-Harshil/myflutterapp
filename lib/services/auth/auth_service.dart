@@ -15,11 +15,12 @@ class AuthService implements AuthProvider {
   Future<AuthUser> createUser({
     required String email,
     required String password,
-  }) =>
-      provider.createUser(
-        email: email,
-        password: password,
-      );
+  }) async {
+    return await provider.createUser(
+      email: email,
+      password: password,
+    );
+  }
 
   @override
   AuthUser? get currentUser => provider.currentUser;
