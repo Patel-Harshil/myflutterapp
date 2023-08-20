@@ -7,11 +7,19 @@ import 'package:my_flutter_app/views/notes/notes_view.dart';
 import 'package:my_flutter_app/views/register_view.dart';
 import 'package:my_flutter_app/views/verify_email_view.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+void main(){
+  // Used for native code to interact with the Flutter engine ie. Java/Kotlin for android and swift/obj-c for ios
+  WidgetsFlutterBinding
+      .ensureInitialized(); 
+  runApp(const MyApp());
+}
 
-  runApp(
-    MaterialApp(
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -25,32 +33,39 @@ void main() {
         verifyEmailRoute: (context) => const VerifyEmailView(),
         newNoteRoute: (context) => const NewNoteView(),
       },
-    ),
-  );
+    );
+  }
 }
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+// ************* Future call should not be inside futureBuilder ??
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: AuthService.firebase().initialize(),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            final user = AuthService.firebase().currentUser;
-            if (user != null) {
-              if (user.isEmailVerified) {
-                return const NotesView();
+    return FutureBuilder<void>( // Used to create widgets based on latest snapshot of interaction with a Future (Future function call)
+      future: AuthService.firebase().initialize(), //initialize firebase
+      builder: (context, snapshot) { 
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("Error: ${snapshot.error}"),
+          );
+        } else {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              final user = AuthService.firebase().currentUser;
+              if (user != null) {
+                if (user.isEmailVerified) {
+                  return const NotesView();
+                } else {
+                  return const VerifyEmailView();
+                }
               } else {
-                return const VerifyEmailView();
+                return const LoginView();
               }
-            } else {
-              return const LoginView();
-            }
-          default:
-            return const CircularProgressIndicator();
+            default:
+              return const CircularProgressIndicator();
+          }
         }
       }, //Builder
     );

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/constants/routes.dart';
 import 'package:my_flutter_app/enums/menu_action.dart';
-import 'dart:developer' as devtools show log;
 import 'package:my_flutter_app/services/auth/auth_service.dart';
 import 'package:my_flutter_app/services/crud/notes_service.dart';
+import 'dart:developer' as devtools show log;
+
+// class CustomException implements Exception {
+//   @override
+//   String toString() {
+//     devtools.log("EXCEPTION: Null operation");
+//     return super.toString();
+//   }
+// }
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -14,22 +22,16 @@ class NotesView extends StatefulWidget {
 
 class _NotesViewState extends State<NotesView> {
   late final NotesService _notesService;
-  String get userEmail => AuthService.firebase().currentUser!.email!;
+  String get userEmail => AuthService.firebase()
+      .currentUser!
+      .email!; // ! -> force unwrap that it cannot be null
 
   @override
   void initState() {
     _notesService = NotesService();
+    _notesService.getOrCreateUser(email: userEmail);
     super.initState();
   }
-
-  @override
-  @override
-@override
-void dispose() {
-    _notesService.close();
-  super.dispose();
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ void dispose() {
       appBar: AppBar(
         title: const Text("My Notes"),
         actions: [
+          //newNote
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(newNoteRoute);
@@ -48,7 +51,6 @@ void dispose() {
               switch (value) {
                 case MenuAction.logout:
                   final shouldLogOut = await showLogOutDialog(context);
-                  devtools.log(shouldLogOut.toString());
                   if (shouldLogOut) {
                     await AuthService.firebase().logOut();
                     // ignore: use_build_context_synchronously
@@ -72,7 +74,7 @@ void dispose() {
         ],
       ),
       body: FutureBuilder(
-        future: _notesService.getOrCreteUser(email: userEmail),
+        future: _notesService.getOrCreateUser(email: userEmail),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
@@ -82,13 +84,34 @@ void dispose() {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text("Waiting for all notes...");
+                      if (snapshot.hasData) {
+                        devtools.log("Snapshot.hasData");
+                        final allNotes = snapshot.data as List<DatabaseNote>;
+                        devtools.log(allNotes.toString());
+                        return ListView.builder(
+                          itemCount: allNotes.length,
+                          itemBuilder: (context, index) {
+                            final note = allNotes[index];
+                            return ListTile(
+                              title: Text(
+                                note.text.isNotEmpty ? note.text : "Empty Note",
+                                maxLines: 1, //extends to 1 line
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        devtools.log("Null stream");
+                        return const CircularProgressIndicator();
+                      }
                     default:
                       return const CircularProgressIndicator();
                   }
                 },
               );
-            default:
+            default: //If user could not be created
               return const CircularProgressIndicator();
           }
         },

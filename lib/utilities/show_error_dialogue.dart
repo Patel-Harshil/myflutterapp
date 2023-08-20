@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 Future<void> showErrorDialog(
   BuildContext context,
   String text,
-) {
-  return showDialog(
+) async {
+  return await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -15,7 +15,7 @@ Future<void> showErrorDialog(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("Ok"),
+            child: const Text("Okay"),
           ),
         ],
       );

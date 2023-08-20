@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/constants/routes.dart';
 import 'package:my_flutter_app/services/auth/auth_exceptions.dart';
@@ -67,13 +69,11 @@ class _LoginViewState extends State<LoginView> {
                 );
                 final user = AuthService.firebase().currentUser;
                 if (user?.isEmailVerified ?? false) {
-                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     notesRoute,
                     (route) => false,
                   );
                 } else {
-                  // ignore: use_build_context_synchronously
                   Navigator.of(context).restorablePushNamedAndRemoveUntil(
                     verifyEmailRoute,
                     (route) => false,

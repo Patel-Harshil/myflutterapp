@@ -1,3 +1,5 @@
+// Firebase Authentication Provider definition
+
 import "package:firebase_core/firebase_core.dart";
 import "package:my_flutter_app/firebase_options.dart";
 import "package:my_flutter_app/services/auth/auth_provider.dart";
@@ -16,6 +18,7 @@ class FirebaseAuthProvider implements AuthProvider {
 
   @override
   Future<AuthUser> createUser({
+    //Crosscheck if ser already exists
     required String email,
     required String password,
   }) async {
@@ -24,15 +27,17 @@ class FirebaseAuthProvider implements AuthProvider {
         email: email,
         password: password,
       );
-      final user = currentUser;
-      if (user != null) {
-        return user;
-      } else {
-        throw UserNotFoundAuthException();
-      }
+      return currentUser;
+      // final user = currentUser;
+      // if (user != null) {
+      // return user;
+      // } else {
+      //   throw UserNotFoundAuthException();
+      // }
     } on FirebaseAuthException catch (e) {
+      // Built in
       if (e.code == 'invalid-email') {
-        throw WeakPasswordAuthException();
+        throw InvalidEmailAuthException();
       } else if (e.code == 'weak-password') {
         throw WeakPasswordAuthException();
       } else if (e.code == 'email-already-in-use') {
@@ -46,12 +51,12 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  AuthUser? get currentUser {
+  AuthUser get currentUser {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      return AuthUser.fromFirebase(user);
+      return AuthUser.fromFirebase(user); // FirebaseAuth -> AuthUser instance
     } else {
-      return null;
+      throw UserNotFoundAuthException();
     }
   }
 
@@ -65,12 +70,13 @@ class FirebaseAuthProvider implements AuthProvider {
         email: email,
         password: password,
       );
-      final user = currentUser;
-      if (user != null) {
-        return user;
-      } else {
-        throw UserNotFoundAuthException();
-      }
+      return currentUser;
+      // final user = currentUser;
+      // if (user != null) {
+      // return user;
+      // } else {
+      //   throw UserNotFoundAuthException();
+      // }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw UserNotFoundAuthException();

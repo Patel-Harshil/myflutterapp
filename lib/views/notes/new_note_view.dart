@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/services/auth/auth_service.dart';
 import 'package:my_flutter_app/services/crud/notes_service.dart';
-import 'dart:developer' as devtools show log;
 
 class NewNoteView extends StatefulWidget {
   const NewNoteView({super.key});
@@ -24,7 +23,9 @@ class _NewNoteViewState extends State<NewNoteView> {
 
   void _textControllerListener() async {
     final note = _note;
-    if (note == null) return;
+    if (note == null) {
+      return;
+    }
     final text = _textController.text;
     await _notesService.updateNote(note: note, text: text);
   }
@@ -41,17 +42,15 @@ class _NewNoteViewState extends State<NewNoteView> {
     } else {
       final currentUser = AuthService.firebase().currentUser!;
       final email = currentUser.email!;
-      devtools.log(email);
-      // devtools.log(c);
       final owner = await _notesService.getUser(email: email);
       return await _notesService.createNote(owner: owner);
     }
   }
 
-  void _deleteNoteIfTextIsEmpty() {
+  void _deleteNoteIfTextIsEmpty() async {
     final note = _note;
     if (_textController.text.isEmpty && note != null) {
-      _notesService.deleteNote(id: note.id);
+      await _notesService.deleteNote(id: note.id);
     }
   }
 
@@ -82,9 +81,8 @@ class _NewNoteViewState extends State<NewNoteView> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              if (snapshot.data != null) {
-                _note = snapshot.data as DatabaseNote;
-              }
+              // if (snapshot.hasData) {
+              _note = snapshot.data as DatabaseNote; //This is creating error
               _setupTextControllerListener();
               return TextField(
                 controller: _textController,
@@ -94,6 +92,8 @@ class _NewNoteViewState extends State<NewNoteView> {
                   hintText: "Start typing your note...",
                 ),
               );
+            // } else
+            // return const CircularProgressIndicator();
             default:
               return const CircularProgressIndicator();
           }
