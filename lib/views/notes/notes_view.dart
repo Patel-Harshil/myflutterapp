@@ -4,17 +4,8 @@ import 'package:my_flutter_app/enums/menu_action.dart';
 import 'package:my_flutter_app/services/auth/auth_service.dart';
 import 'package:my_flutter_app/services/crud/notes_service.dart';
 import 'package:my_flutter_app/utilities/dialogs/logout_dialog.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:my_flutter_app/views/notes/note_list_view.dart';
-
-// class CustomException implements Exception {
-//   @override
-//   String toString() {
-//     devtools.log("EXCEPTION: Null operation");
-//     return super.toString();
-//   }
-// }
+import 'dart:developer' as devtools show log;
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -45,7 +36,7 @@ class _NotesViewState extends State<NotesView> {
           //newNote
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(newNoteRoute);
+              Navigator.of(context).pushNamed(createUpdateNoteRoute);
             },
             icon: const Icon(Icons.add),
           ),
@@ -95,6 +86,12 @@ class _NotesViewState extends State<NotesView> {
                           notes: allNotes,
                           onDeleteNote: (note) async {
                             await _notesService.deleteNote(id: note.id);
+                          },
+                          onTap: (note) {
+                            Navigator.of(context).pushNamed(
+                              createUpdateNoteRoute,
+                              arguments: note,
+                            );
                           },
                         );
                       } else {

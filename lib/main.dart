@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_app/constants/routes.dart';
 import 'package:my_flutter_app/services/auth/auth_service.dart';
 import 'package:my_flutter_app/views/login_view.dart';
-import 'package:my_flutter_app/views/notes/new_note_view.dart';
+import 'package:my_flutter_app/views/notes/create_update_note_view.dart';
 import 'package:my_flutter_app/views/notes/notes_view.dart';
 import 'package:my_flutter_app/views/register_view.dart';
 import 'package:my_flutter_app/views/verify_email_view.dart';
 
-void main(){
+void main() {
   // Used for native code to interact with the Flutter engine ie. Java/Kotlin for android and swift/obj-c for ios
-  WidgetsFlutterBinding
-      .ensureInitialized(); 
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -31,7 +30,7 @@ class MyApp extends StatelessWidget {
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
-        newNoteRoute: (context) => const NewNoteView(),
+        createUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
       },
     );
   }
@@ -43,9 +42,10 @@ class HomePage extends StatelessWidget {
 // ************* Future call should not be inside futureBuilder ??
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>( // Used to create widgets based on latest snapshot of interaction with a Future (Future function call)
+    return FutureBuilder<void>(
+      // Used to create widgets based on latest snapshot of interaction with a Future (Future function call)
       future: AuthService.firebase().initialize(), //initialize firebase
-      builder: (context, snapshot) { 
+      builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
             child: Text("Error: ${snapshot.error}"),
