@@ -26,6 +26,14 @@ class DatabaseIsNoteOpenException implements Exception {
 }
 
 // user
+class UserShouldBeSetBeforeReadingException implements Exception {
+  @override
+  String toString() {
+    devtools.log("EXCEPTION: User should be set before reading");
+    return super.toString();
+  }
+}
+
 class CouldNotDeleteUserException implements Exception {
   @override
   String toString() {

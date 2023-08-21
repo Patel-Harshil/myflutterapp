@@ -79,7 +79,6 @@ class _NotesViewState extends State<NotesView> {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
                       if (snapshot.hasData) {
-                        devtools.log("Snapshot.hasData");
                         final allNotes = snapshot.data as List<DatabaseNote>;
                         devtools.log(allNotes.toString());
                         return NotesListView(
@@ -95,7 +94,6 @@ class _NotesViewState extends State<NotesView> {
                           },
                         );
                       } else {
-                        devtools.log("Null stream");
                         return const CircularProgressIndicator();
                       }
                     default:
