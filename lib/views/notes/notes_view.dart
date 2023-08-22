@@ -18,7 +18,7 @@ class _NotesViewState extends State<NotesView> {
   late final NotesService _notesService;
   String get userEmail => AuthService.firebase()
       .currentUser!
-      .email!; // ! -> force unwrap that it cannot be null
+      .email; // ! -> force unwrap that it cannot be null
 
   @override
   void initState() {

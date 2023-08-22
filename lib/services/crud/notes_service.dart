@@ -11,9 +11,10 @@ class NotesService {
   List<DatabaseNote> _notes = [];
   DatabaseUser? _user;
 
-  // Creating Singleton - Only created once
+  //-------------------------------- Creating _shared Singleton - Only created once------------------------------------
+
   static final NotesService _shared = NotesService._sharedInstance();
-  NotesService._sharedInstance() {
+  NotesService._sharedInstance() { 
     _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
       onListen: () {
         _notesStreamController.sink.add(_notes);
@@ -22,9 +23,7 @@ class NotesService {
   }
   factory NotesService() => _shared;
 
-// Creating stream of Notes
   late final StreamController<List<DatabaseNote>> _notesStreamController;
-
   Stream<List<DatabaseNote>> get allNotes =>
       _notesStreamController.stream.filter((note) {
         final currentUser = _user;
@@ -42,7 +41,7 @@ class NotesService {
     _notesStreamController.add(_notes);
   }
 
-// DataBase
+// --------------------------------------DataBase---------------------------------------------
   Future<void> _ensureDbIsOpen() async {
     try {
       await open();
