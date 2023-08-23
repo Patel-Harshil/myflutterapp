@@ -9,6 +9,7 @@ import "package:firebase_auth/firebase_auth.dart"
     show FirebaseAuth, FirebaseAuthException;
 
 class FirebaseAuthProvider implements AuthProvider {
+
   @override
   Future<void> initialize() async {
     await Firebase.initializeApp(
@@ -28,12 +29,6 @@ class FirebaseAuthProvider implements AuthProvider {
         password: password,
       );
       return currentUser;
-      // final user = currentUser;
-      // if (user != null) {
-      // return user;
-      // } else {
-      //   throw UserNotFoundAuthException();
-      // }
     } on FirebaseAuthException catch (e) {
       // Built in
       if (e.code == 'invalid-email') {
@@ -71,12 +66,6 @@ class FirebaseAuthProvider implements AuthProvider {
         password: password,
       );
       return currentUser;
-      // final user = currentUser;
-      // if (user != null) {
-      // return user;
-      // } else {
-      //   throw UserNotFoundAuthException();
-      // }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw UserNotFoundAuthException();

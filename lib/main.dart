@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/constants/routes.dart';
+import 'package:my_flutter_app/services/auth/auth_exceptions.dart';
 import 'package:my_flutter_app/services/auth/auth_service.dart';
 import 'package:my_flutter_app/views/login_view.dart';
 import 'package:my_flutter_app/views/notes/create_update_note_view.dart';
@@ -53,14 +54,18 @@ class HomePage extends StatelessWidget {
         } else {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              final user = AuthService.firebase().currentUser;
-              if (user != null) {
-                if (user.isEmailVerified) {
-                  return const NotesView();
+              try {
+                final user = AuthService.firebase().currentUser;
+                if (user != null) {
+                  if (user.isEmailVerified) {
+                    return const NotesView();
+                  } else {
+                    return const VerifyEmailView();
+                  }
                 } else {
-                  return const VerifyEmailView();
+                  return const LoginView();
                 }
-              } else {
+              } on UserNotFoundAuthException {
                 return const LoginView();
               }
             default:
