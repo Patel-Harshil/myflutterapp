@@ -1,10 +1,11 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic",
-  "cSpell.words": [
-    "ARGB",
-    "autocorrect",
-    "AUTOINCREMENT",
-    "sqflite"
-  ],
-  "cmake.sourceDirectory": "C:/vs_projects/myflutterapp/build/windows/extracted/firebase_cpp_sdk"
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"cSpell.words": [
+		"ARGB",
+		"autocorrect",
+		"AUTOINCREMENT",
+		"Registeratering",
+		"sqflite"
+	],
+	"cmake.sourceDirectory": "C:/vs_projects/myflutterapp/build/windows/extracted/firebase_cpp_sdk"
 }
