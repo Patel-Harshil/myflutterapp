@@ -21,24 +21,28 @@ class NotesListView extends StatelessWidget {
       itemCount: notes.length,
       itemBuilder: (context, index) {
         final note = notes.elementAt(index);
-        return ListTile(
-          onTap: () {
-            onTap(note);
-          },
-          title: Text(
-            note.text.isNotEmpty ? note.text : "Empty Note",
-            maxLines: 1, //extends to 1 line
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: IconButton(
-            onPressed: () async {
-              final shouldDelete = await showDeleteDialog(context);
-              if (shouldDelete) {
-                onDeleteNote(note);
-              }
+        return Container(
+          padding: const EdgeInsets.all(10),
+          color: Colors.white30,
+          child: ListTile(
+            onTap: () {
+              onTap(note);
             },
-            icon: const Icon(Icons.delete),
+            title: Text(
+              note.text.isNotEmpty ? note.text : "Empty Note",
+              maxLines: 1, //extends to 1 line
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: IconButton(
+              onPressed: () async {
+                final shouldDelete = await showDeleteDialog(context);
+                if (shouldDelete) {
+                  onDeleteNote(note);
+                }
+              },
+              icon: const Icon(Icons.delete),
+            ),
           ),
         );
       },
