@@ -22,7 +22,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           const Text("Didn't receive email?"),
           TextButton(
             onPressed: () async {
-              context.read<AUthBloc>().add(
+              context.read<AuthBloc>().add(
                     const AuthEventSendEmailVerification(),
                   );
             },
@@ -30,7 +30,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           ),
           TextButton(
             onPressed: () async {
-              context.read<AUthBloc>().add(
+              context.read<AuthBloc>().add(
                     const AuthEventLogOut(),
                   );
             },

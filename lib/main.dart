@@ -6,6 +6,7 @@ import 'package:my_flutter_app/services/auth/bloc/auth_bloc.dart';
 import 'package:my_flutter_app/services/auth/bloc/auth_event.dart';
 import 'package:my_flutter_app/services/auth/bloc/auth_state.dart';
 import 'package:my_flutter_app/services/auth/firebase_auth_provider.dart';
+import 'package:my_flutter_app/views/forgot_password_view.dart';
 import 'package:my_flutter_app/views/login_view.dart';
 import 'package:my_flutter_app/views/notes/create_update_note_view.dart';
 import 'package:my_flutter_app/views/notes/notes_view.dart';
@@ -22,8 +23,8 @@ void main() {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: BlocProvider<AUthBloc>(
-        create: (context) => AUthBloc(FirebaseAuthProvider()),
+      home: BlocProvider<AuthBloc>(
+        create: (context) => AuthBloc(FirebaseAuthProvider()),
         child: const HomePage(),
       ),
       routes: {
@@ -39,8 +40,8 @@ class HomePage extends StatelessWidget {
 // ************* Future call should not be inside futureBuilder ??
   @override
   Widget build(BuildContext context) {
-    context.read<AUthBloc>().add(const AuthEventInitialize());
-    return BlocConsumer<AUthBloc, AuthState>(
+    context.read<AuthBloc>().add(const AuthEventInitialize());
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.isLoading) {
           LoadingScreen().show(context: context, text: "Please wait a moment");
@@ -53,10 +54,12 @@ class HomePage extends StatelessWidget {
           return const NotesView();
         } else if (state is AUthStateNeedsVerification) {
           return const VerifyEmailView();
-        } else if (state is AuthStateLoggedOut) {
-          return const LoginView();
         } else if (state is AuthStateRegistering) {
           return const RegisterView();
+        } else if (state is AuthStateLoggedOut) {
+          return const LoginView();
+        } else if (state is AuthStateForgotPassword) {
+          return const ForgotPasswordView();
         } else {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),

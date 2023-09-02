@@ -19,7 +19,6 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
-
   @override
   void initState() {
     _email = TextEditingController();
@@ -36,62 +35,77 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AUthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          if (state.exception is UserNotFoundAuthException) {
-            await showErrorDialog(context, "User not found");
-          } else if (state.exception is WrongPasswordAuthException) {
-            await showErrorDialog(context, "Wrong credentials");
-          } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, "Authentication error");
-          } 
+          if (state.exception != null) {
+            if (state.exception is UserNotFoundAuthException) {
+              await showErrorDialog(
+                  context, "Cannot find user with entered credentials!");
+            } else if (state.exception is WrongPasswordAuthException) {
+              await showErrorDialog(context, "Wrong credentials");
+            } else if (state.exception is GenericAuthException) {
+              await showErrorDialog(context, "Authentication error");
+            }
+          }
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Login"),
-          backgroundColor: const Color.fromARGB(255, 131, 227, 232),
         ),
-        body: Column(
-          children: [
-            TextField(
-              controller: _email,
-              keyboardType: TextInputType.emailAddress,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Enter email_ID',
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text("Welcome back!"),
+              TextField(
+                controller: _email,
+                keyboardType: TextInputType.emailAddress,
+                enableSuggestions: false,
+                autocorrect: false,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Enter email_ID',
+                ),
               ),
-            ),
-            TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Enter Password',
+              TextField(
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  hintText: 'Enter Password',
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () async {
-                final email = _email.text;
-                final password = _password.text;
-                context.read<AUthBloc>().add(
-                      AUthEventLogIn(email, password),
-                    );
-              },
-              child: const Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AUthBloc>().add(
-                      const AuthEventShouldRegister(),
-                    );
-              },
-              child: const Text("Not registered yet? Register here!"),
-            ),
-          ], //children
+              TextButton(
+                onPressed: () async {
+                  final email = _email.text;
+                  final password = _password.text;
+                  context.read<AuthBloc>().add(
+                        AUthEventLogIn(email, password),
+                      );
+                },
+                child: const Text('Login'),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        const AuthEventForgotPassword(),
+                      );
+                },
+                child: const Text("I forgot my password"),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        const AuthEventRegister(),
+                      );
+                },
+                child: const Text("Not registered yet? Register here!"),
+              ),
+            ], //children
+          ),
         ),
       ),
     );
