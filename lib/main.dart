@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_flutter_app/constants/routes.dart';
+import 'package:my_flutter_app/helpers/loading/loading_screen.dart';
 import 'package:my_flutter_app/services/auth/bloc/auth_bloc.dart';
 import 'package:my_flutter_app/services/auth/bloc/auth_event.dart';
 import 'package:my_flutter_app/services/auth/bloc/auth_state.dart';
@@ -39,7 +40,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<AUthBloc>().add(const AuthEventInitialize());
-    return BlocBuilder<AUthBloc, AuthState>(
+    return BlocConsumer<AUthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.isLoading) {
+          LoadingScreen().show(context: context, text: "Please wait a moment");
+        } else {
+          LoadingScreen().hide();
+        }
+      },
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
           return const NotesView();
@@ -47,11 +55,11 @@ class HomePage extends StatelessWidget {
           return const VerifyEmailView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
-        } else if (state is AuthStateRegisteratering) {
+        } else if (state is AuthStateRegistering) {
           return const RegisterView();
         } else {
           return const Scaffold(
-            body: CircularProgressIndicator(),
+            body: Center(child: CircularProgressIndicator()),
           );
         }
       },

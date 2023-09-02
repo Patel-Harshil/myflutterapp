@@ -37,7 +37,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return BlocListener<AUthBloc, AuthState>(
       listener: (context, state) async {
-        if (state is AuthStateRegisteratering) {
+        if (state is AuthStateRegistering) {
           await showErrorDialog(context, "Weak Password");
         } else if (state is EmailAlreadyInUseAuthException) {
           await showErrorDialog(context, "Email already exists");

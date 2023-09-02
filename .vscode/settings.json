@@ -7,5 +7,5 @@
 		"Registeratering",
 		"sqflite"
 	],
-	"cmake.sourceDirectory": "C:/vs_projects/myflutterapp/build/windows/extracted/firebase_cpp_sdk"
+	"cmake.sourceDirectory": "C:/vs_projects/myflutterapp/linux"
 }
