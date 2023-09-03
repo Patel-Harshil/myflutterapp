@@ -66,7 +66,7 @@ class _LoginViewState extends State<LoginView> {
                 autocorrect: false,
                 autofocus: true,
                 decoration: const InputDecoration(
-                  hintText: 'Enter email_ID',
+                  hintText: 'Email',
                 ),
               ),
               TextField(
@@ -75,7 +75,7 @@ class _LoginViewState extends State<LoginView> {
                 enableSuggestions: false,
                 autocorrect: false,
                 decoration: const InputDecoration(
-                  hintText: 'Enter Password',
+                  hintText: 'Password',
                 ),
               ),
               TextButton(
