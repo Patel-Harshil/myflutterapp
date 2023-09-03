@@ -55,11 +55,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           password: password,
         );
         await provider.sendEmailVerification();
+        emit(const AuthStateRegistering(exception: null, isLoading: false));
         emit(const AUthStateNeedsVerification(isLoading: false));
       } on Exception catch (e) {
         emit(AuthStateRegistering(exception: e, isLoading: false));
       }
-      emit(const AuthStateRegistering(exception: null, isLoading: false));
     });
 
     // reset password
